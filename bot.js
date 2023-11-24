@@ -4,6 +4,7 @@ const fetch = require("node-fetch");
 const client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES'] });
 const axios = require('axios');
 const { EmbedBuilder } = require('discord.js');
+require('dotenv').config();
 
 // NODE/EXPRESS JS IMPORTS
 const express = require('express');
@@ -23,7 +24,9 @@ let personaName;
 let profileUrl;
 let avatar;
 
-const token = '';
+// const token = 'MTE3NTE3NDA5NjA0OTQwNjAxNg.GW8w1E.PIKa7Rkbm3aY_ZKE6iPULEj5TK0U0uZrJLzAXU';
+const token = process.env.TOKEN_KEY;
+const steamApiKey = process.env.STEAM_API_KEY;
 
 // LOGIN WITH STEAM FUNCTION (USING OPENID AND PASSPORT.JS)
 const steam_login = () => {
@@ -41,7 +44,7 @@ const steam_login = () => {
         passport.use(new SteamStrategy({
             returnURL: 'http://localhost:' + port + '/api/auth/steam/return',
             realm: 'http://localhost:' + port + '/',
-            apiKey: ''
+            apiKey: steamApiKey
         }, function (identifier, profile, done) {
             process.nextTick(function () {
                 profile.identifier = identifier;
@@ -102,13 +105,13 @@ client.on('message', async (message) => {
     // IF USER ASKES OF COMMANDS
     if (u_message === '!help') {
         let msg = "THIS BOT WILL TRACK YOUR CS2 STATS, KEEP YOU INFORMED OF NEW CS2 UPDATES! GET STARTED BELOW\n\n";
-        msg += "1)Steam Authentication: If you wish to have your every new MM game analyzed, you must log in to steam. Type !login to get started.\n";
-        msg += "1(A) Submitting last known code: You must enter your last known code in order to automatize MM games analysis. Type !setKnownCode <Your Code>\n";
-        msg += "1(B) Submitting Steam AuthId Key: You must enter your last known code in order to automatize MM games analysis. Type !setIdKeyCode <Your Key>\n";
-        msg += "2)Profile: If you wish to see your accound details. TYpe !profile.\n";
-        msg += "3)Logout: If you wish to see your accound details. TYpe !logout.\n";
+        msg += "1)Steam Authentication: If you wish to have your every new MM game analyzed, you must log in to steam. Type !login to get started.\n\n";
+        msg += "1(A) Submitting last known code: You must enter your last known code in order to automatize MM games analysis. Type !setKnownCode <Your Code>\n\n";
+        msg += "1(B) Submitting Steam AuthId Key: You must enter your last known code in order to automatize MM games analysis. Type !setIdKeyCode <Your Key>\n\n";
+        msg += "2)Profile: If you wish to see your accound details. TYpe !profile.\n\n";
+        msg += "3)Logout: If you wish to see your accound details. TYpe !logout.\n\n";
 
-        await message.channel.send(`\`${msg}\``);
+        await message.channel.send("```"+msg+"```");
     }
 
     // IF USER WANTS TO LOGIN, in try block wait till promise is resolved and store the response and send confirmation message else show error
